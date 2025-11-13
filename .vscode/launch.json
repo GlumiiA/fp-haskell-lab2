@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Haskell Project",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/.stack-work/install/x86_64-windows/*/bin/lab1-exe.exe",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        }
+    ]
+}

@@ -1,0 +1,38 @@
+name: Haskell CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up GHC and Stack
+      uses: haskell-actions/setup@v2
+      with:
+        ghc-version: '9.10.3'
+        stack-version: '2.11.0'
+
+    - name: Install project dependencies
+      run: stack setup
+
+    - name: Build project with warnings as errors
+      run: stack build --ghc-options "-Wall -Werror" --no-strip --no-haddock
+
+    - name: Run tests
+      run: stack test --ghc-options "-Wall -Werror" --no-haddock
+
+    - name: Run HLint
+      run: stack exec -- hlint src test
+
+    - name: Run Ormolu formatter check
+      run: |
+        for file in $(find src test -name "*.hs"); do
+          stack exec -- ormolu --mode check "$file"
+        done
