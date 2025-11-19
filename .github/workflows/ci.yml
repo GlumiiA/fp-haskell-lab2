@@ -25,8 +25,11 @@ jobs:
     - name: Build project with warnings as errors
       run: stack build --ghc-options "-Wall -Werror" --no-strip --no-haddock
 
-    - name: Run tests
-      run: stack test --ghc-options "-Wall -Werror" --no-haddock
+    - name: Run Unit tests 
+      run: |
+        # Run the project's test-suite (unit + property tests).
+        # `stack test` will build and execute the test-suite defined in the .cabal/package.yaml.
+        stack test --test-arguments="--quiet"
 
     - name: Run HLint
       run: stack exec -- hlint src test

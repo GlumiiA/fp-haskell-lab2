@@ -1,4 +1,4 @@
-# Changelog for `lab1`
+# Changelog for `lab2`
 
 All notable changes to this project will be documented in this file.
 
