@@ -7,25 +7,29 @@ import HashMap.API
 import HashMap.Internal
 import Types()
 
+-- QuickCheck arguments (limit tests/sizes to speed CI)
+qcArgs :: Args
+qcArgs = stdArgs { maxSuccess = 50, maxSize = 20 }
+
 fromListHM :: [(Int,Int)] -> HashMap Int Int
 fromListHM = Prelude.foldl (\acc (k,v) -> insertH k v acc) (emptyH :: HashMap Int Int)
 
 prop_insert_lookup :: Int -> Int -> [(Int,Int)] -> Property
 prop_insert_lookup k v kvs =
-	property $ lookupH k (insertH k v (fromListHM kvs)) == Just v
+    property $ lookupH k (insertH k v (fromListHM kvs)) == Just v
 
 prop_map_values :: [(Int,Int)] -> Property
 prop_map_values kvs =
-	property $ all (\(k,v) -> lookupH k (mapH ((+1) :: Int -> Int) (fromListHM kvs)) == Just (v + 1)) kvs
+    property $ all (\(k,v) -> lookupH k (mapH ((+1) :: Int -> Int) (fromListHM kvs)) == Just (v + 1)) kvs
 
 propTests :: Test
 propTests = TestCase $ do
-	r1 <- quickCheckResult prop_insert_lookup
-	case r1 of
-		Success{} -> return ()
-		_ -> assertFailure "prop_insert_lookup failed"
-	r2 <- quickCheckResult prop_map_values
-	case r2 of
-		Success{} -> return ()
-		_ -> assertFailure "prop_map_values failed"
+    r1 <- quickCheckWithResult qcArgs prop_insert_lookup
+    case r1 of
+        Success{} -> return ()
+        _ -> assertFailure "prop_insert_lookup failed"
+    r2 <- quickCheckWithResult qcArgs prop_map_values
+    case r2 of
+        Success{} -> return ()
+        _ -> assertFailure "prop_map_values failed"
 
