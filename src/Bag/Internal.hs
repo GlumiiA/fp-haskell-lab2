@@ -30,7 +30,7 @@ deleteBag x (Bag hm) =
 
 -- Подсчёт количества
 countBag :: (Eq a, Hashable a) => a -> Bag a -> Int
-countBag x (Bag hm) = fromMaybe 0 (lookupH x hm)
+countBag x (Bag hm) = fromMaybe 0 (lookupH x hm)  -- HLINT ignore "Use fromMaybe"
 
 -- Применение функции к каждому элементу
 mapBag :: (Eq a, Hashable a) => (a -> a) -> Bag a -> Bag a
