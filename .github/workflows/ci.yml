@@ -43,8 +43,11 @@ jobs:
     - name: Build library
       run: stack build --ghc-options "-Wall" --no-strip --no-haddock
 
+    - name: Build tests (prepare for running)
+      run: stack build --test --no-run-tests
+
     - name: Run tests (using pre-built artifacts)
-      run: stack test --no-build --test-arguments="--quiet"
+      run: stack test --test-arguments="--quiet"
 
     - name: Run HLint
       run: stack exec -- hlint src test
