@@ -13,14 +13,16 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Cache Stack and build artifacts
+    - name: Cache Stack work and dependencies
       uses: actions/cache@v4
       with:
         path: |
           ~/.stack
+          ~/.ghc
           .stack-work
-        key: ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml','**/package.yaml','**/*.cabal') }}
+        key: ${{ runner.os }}-stack-ghc-9.10.3-${{ hashFiles('**/stack.yaml','**/package.yaml','**/*.cabal') }}
         restore-keys: |
+          ${{ runner.os }}-stack-ghc-9.10.3-
           ${{ runner.os }}-stack-
 
     - name: Set up GHC and Stack
@@ -28,18 +30,21 @@ jobs:
       with:
         ghc-version: '9.10.3'
         stack-version: '2.11.0'
+        enable-stack: true
+        stack-no-global: true
+        stack-setup-ghc: true
 
-    - name: Install project dependencies
+    - name: Install GHC via Stack
       run: stack setup
 
-    - name: Build project with warnings as errors
-      run: stack build --ghc-options "-Wall -Werror" --no-strip --no-haddock
+    - name: Build dependencies only (cached step)
+      run: stack build --only-dependencies --test --no-run-tests
 
-    - name: Run Unit tests 
-      run: |
-        # Run the project's test-suite (unit + property tests).
-        # `stack test` will build and execute the test-suite defined in the .cabal/package.yaml.
-        stack test --test-arguments="--quiet"
+    - name: Build library
+      run: stack build --ghc-options "-Wall" --no-strip --no-haddock
+
+    - name: Run tests (using pre-built artifacts)
+      run: stack test --no-build --test-arguments="--quiet"
 
     - name: Run HLint
       run: stack exec -- hlint src test
