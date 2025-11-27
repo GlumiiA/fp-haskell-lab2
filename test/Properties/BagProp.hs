@@ -13,11 +13,11 @@ qcArgs = stdArgs { maxSuccess = 20, maxSize = 10 }
 
 -- Build a Bag from a list of Ints
 fromListBag :: [Int] -> Bag Int
-fromListBag = Prelude.foldl (\acc x -> insertB x acc) (emptyB :: Bag Int)
+fromListBag = Prelude.foldl (flip insertB) (emptyB :: Bag Int)
 
 -- Total number of elements in a Bag (sum of counts)
 totalCount :: Bag Int -> Int
-totalCount b = foldlB (\s (_,n) -> s + n) 0 b
+totalCount = foldlB (\s (_,n) -> s + n) 0
 
 prop_insert_increases_count :: Int -> [Int] -> Property
 prop_insert_increases_count x xs =
@@ -38,7 +38,7 @@ prop_monoid_identity xs =
 prop_monoid_associative :: [Int] -> [Int] -> [Int] -> Property
 prop_monoid_associative xs ys zs =
     let a = fromListBag xs; b = fromListBag ys; c = fromListBag zs
-    in property $ (mappendM (mappendM a b) c) == (mappendM a (mappendM b c))
+    in property $ mappendM (mappendM a b) c == mappendM a (mappendM b c)
 
 prop_monoid_identity_std :: [Int] -> Property
 prop_monoid_identity_std xs =

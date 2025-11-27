@@ -3,6 +3,7 @@ module Bag.Internal where
 import Types
 import HashMap.API
 import HashMap.Internal (HashMap, size)
+import Data.Maybe (fromMaybe)
 
 
 -- Bag data type, хранит HashMap a Int
@@ -29,7 +30,7 @@ deleteBag x (Bag hm) =
 
 -- Подсчёт количества
 countBag :: (Eq a, Hashable a) => a -> Bag a -> Int
-countBag x (Bag hm) = maybe 0 id (lookupH x hm)
+countBag x (Bag hm) = fromMaybe 0 (lookupH x hm)
 
 -- Применение функции к каждому элементу
 mapBag :: (Eq a, Hashable a) => (a -> a) -> Bag a -> Bag a

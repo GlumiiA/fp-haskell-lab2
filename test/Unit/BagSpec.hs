@@ -34,7 +34,7 @@ testMap = TestCase $ do
 -- Тест filter
 testFilter :: Test
 testFilter = TestCase $ do
-    let b = Prelude.foldl (\acc x -> insertB x acc) (emptyB :: Bag Int) [1,2,3,4]
+    let b = Prelude.foldl (flip insertB) (emptyB :: Bag Int) [1,2,3,4]
         b2 = filterB (even :: Int -> Bool) b
     countB 2 b2 @?= 1
     countB 4 b2 @?= 1
