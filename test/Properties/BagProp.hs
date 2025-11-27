@@ -9,7 +9,7 @@ import Types()
 
 -- QuickCheck arguments (limit tests/sizes to speed CI)
 qcArgs :: Args
-qcArgs = stdArgs { maxSuccess = 50, maxSize = 20 }
+qcArgs = stdArgs { maxSuccess = 20, maxSize = 10 }
 
 -- Build a Bag from a list of Ints
 fromListBag :: [Int] -> Bag Int

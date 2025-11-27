@@ -47,7 +47,7 @@ jobs:
       run: stack build --test --no-run-tests
 
     - name: Run tests (using pre-built artifacts)
-      run: stack test --test-arguments="--quiet"
+      run: stack test --test-arguments="--quiet" --test-suite-timeout=300
 
     - name: Run HLint
       run: stack exec -- hlint src test

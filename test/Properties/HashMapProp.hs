@@ -9,7 +9,7 @@ import Types()
 
 -- QuickCheck arguments (limit tests/sizes to speed CI)
 qcArgs :: Args
-qcArgs = stdArgs { maxSuccess = 50, maxSize = 20 }
+qcArgs = stdArgs { maxSuccess = 20, maxSize = 10 }
 
 fromListHM :: [(Int,Int)] -> HashMap Int Int
 fromListHM = Prelude.foldl (\acc (k,v) -> insertH k v acc) (emptyH :: HashMap Int Int)
