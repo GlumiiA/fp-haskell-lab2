@@ -43,7 +43,7 @@ prop_monoid_associative xs ys zs =
 prop_monoid_identity_std :: [Int] -> Property
 prop_monoid_identity_std xs =
     let b = fromListBag xs
-    in property $ (b <> mempty) == b && (mempty <> b) == b  -- HLINT ignore "Monoid law"
+    in property $ (b <> mempty) == b && (mempty <> b) == b
 
 prop_monoid_associative_std :: [Int] -> [Int] -> [Int] -> Property
 prop_monoid_associative_std xs ys zs =

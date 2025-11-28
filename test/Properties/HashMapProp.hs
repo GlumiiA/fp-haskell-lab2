@@ -6,6 +6,7 @@ import Test.QuickCheck
 import HashMap.API
 import HashMap.Internal
 import Types()
+import Data.List (nubBy)
 
 -- QuickCheck arguments (limit tests/sizes to speed CI)
 qcArgs :: Args
@@ -20,7 +21,10 @@ prop_insert_lookup k v kvs =
 
 prop_map_values :: [(Int,Int)] -> Property
 prop_map_values kvs =
-    property $ all (\(k,v) -> lookupH k (mapH ((+1) :: Int -> Int) (fromListHM kvs)) == Just (v + 1)) kvs
+    let uniqueKvs = nubBy (\(k1,_) (k2,_) -> k1 == k2) kvs  -- remove duplicate keys
+        hm = fromListHM uniqueKvs
+        mappedHm = mapH ((+1) :: Int -> Int) hm
+    in property $ all (\(k,v) -> lookupH k mappedHm == Just (v + 1)) uniqueKvs
 
 propTests :: Test
 propTests = TestCase $ do
