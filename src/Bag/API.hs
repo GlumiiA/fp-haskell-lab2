@@ -1,9 +1,7 @@
 module Bag.API where
 
-
 import Bag.Internal
 import Types
-
 
 class BagClass b where
   emptyB :: b a
@@ -14,7 +12,6 @@ class BagClass b where
   filterB :: (Eq a, Hashable a) => (a -> Bool) -> b a -> b a
   foldlB :: (x -> (a, Int) -> x) -> x -> b a -> x
   foldrB :: ((a, Int) -> x -> x) -> x -> b a -> x
-
 
 instance BagClass Bag where
   emptyB = emptyBag
